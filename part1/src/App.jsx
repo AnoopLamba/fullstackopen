@@ -2,11 +2,13 @@ import { useState } from "react";
 
 const StatisticLine = (props) => {
   const { value, text } = props;
+  const formattedValue = parseFloat(value.toFixed(2));
 
   return (
-    <p>
-      {text} {value}
-    </p>
+    <tr>
+      <td>{text}</td>
+      <td>{formattedValue}</td>
+    </tr>
   );
 };
 
@@ -16,16 +18,21 @@ const Statistics = (props) => {
   if (all) {
     return (
       <>
-        <h2>statistics</h2>
-        <StatisticLine text="good" value={good} />
-        <StatisticLine text="neutral" value={neutral} />
-        <StatisticLine text="bad" value={bad} />
-        <br />
-        <StatisticLine text="all" value={all} />
-        <br />
-        <StatisticLine text="average" value={average} />
-        <StatisticLine text="positive" value={positive} />
-        <br />
+        <table>
+          <thead>
+            <tr>
+              <th colSpan={2}>Statistics</th>
+            </tr>
+          </thead>
+          <tbody>
+            <StatisticLine text="good" value={good} />
+            <StatisticLine text="neutral" value={neutral} />
+            <StatisticLine text="bad" value={bad} />
+            <StatisticLine text="all" value={all} />
+            <StatisticLine text="average" value={average} />
+            <StatisticLine text="positive" value={positive} />
+          </tbody>
+        </table>
       </>
     );
   }

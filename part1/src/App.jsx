@@ -2,7 +2,6 @@ import { useState } from "react";
 
 const Statistics = (props) => {
   const { good, neutral, bad, average, positive, all } = props;
-
   return (
     <>
       <h2>statistics</h2>

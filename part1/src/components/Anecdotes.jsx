@@ -1,6 +1,8 @@
 import { useState } from "react";
 
 const Anecdotes = () => {
+  const [selected, setSelected] = useState(0);
+
   const anecdotes = [
     "If it hurts, do it more often.",
     "Adding manpower to a late software project makes it later!",
@@ -12,16 +14,26 @@ const Anecdotes = () => {
     "The only way to go fast, is to go well.",
   ];
 
-  const [selected, setSelected] = useState(0);
+  const [points, setPoints] = useState(new Array(anecdotes.length).fill(0));
 
   const generateRandom = (arrayLength) => {
     const random = Math.floor(Math.random() * arrayLength);
     setSelected(random);
   };
 
+  const increasePoints = () => {
+    const newPoints = { ...points };
+    newPoints[selected] += 1;
+    setPoints(newPoints);
+  };
+
   return (
     <>
       <p>{anecdotes[selected]}</p>
+      <br />
+      <p>This anecdote have: {points[selected]} points</p>
+      <br />
+      <button onClick={increasePoints}>Vote for this anecdote</button>
       <br />
       <button onClick={() => generateRandom(anecdotes.length)}>
         Next Anecdote

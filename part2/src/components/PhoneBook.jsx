@@ -1,8 +1,9 @@
 import { useState } from "react";
 
 const Phonebook = () => {
-  const [persons, setPersons] = useState([{ name: "Arto Hellas" }]);
+  const [persons, setPersons] = useState([]);
   const [newName, setNewName] = useState("");
+  const [newNumber, setNewNumber] = useState("");
 
   const handleFormSubmit = (e) => {
     e.preventDefault();
@@ -14,9 +15,11 @@ const Phonebook = () => {
     const newPerson = {
       id: persons.length + 1,
       name: newName,
+      phone: newNumber,
     };
     setPersons(persons.concat(newPerson));
     setNewName("");
+    setNewNumber("");
   };
 
   return (
@@ -26,7 +29,21 @@ const Phonebook = () => {
       <form onSubmit={handleFormSubmit}>
         <label>
           Name:
-          <input value={newName} onChange={(e) => setNewName(e.target.value)} />
+          <input
+            type="text"
+            value={newName}
+            onChange={(e) => setNewName(e.target.value)}
+            required
+          />
+        </label>
+        <label>
+          Phone Number:
+          <input
+            type="number"
+            value={newNumber}
+            onChange={(e) => setNewNumber(e.target.value)}
+            required
+          />
         </label>
         <br />
         <button type="submit">add</button>
@@ -34,7 +51,9 @@ const Phonebook = () => {
       <br />
       <h2>Numbers</h2>
       {persons.map((person) => (
-        <p key={person.id}>{person.name}</p>
+        <p key={person.id}>
+          {person.name} {person.phone}
+        </p>
       ))}
     </div>
   );

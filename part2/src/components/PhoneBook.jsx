@@ -6,11 +6,17 @@ const Phonebook = () => {
 
   const handleFormSubmit = (e) => {
     e.preventDefault();
+    if (persons.find((person) => person.name === newName)) {
+      window.alert(`"${newName}" is already in the phonebook, choose another!`);
+      return;
+    }
+
     const newPerson = {
       id: persons.length + 1,
       name: newName,
     };
     setPersons(persons.concat(newPerson));
+    setNewName("");
   };
 
   return (

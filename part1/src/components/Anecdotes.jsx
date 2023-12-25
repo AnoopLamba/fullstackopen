@@ -1,8 +1,6 @@
 import { useState } from "react";
 
 const Anecdotes = () => {
-  const [selected, setSelected] = useState(0);
-
   const anecdotes = [
     "If it hurts, do it more often.",
     "Adding manpower to a late software project makes it later!",
@@ -14,7 +12,9 @@ const Anecdotes = () => {
     "The only way to go fast, is to go well.",
   ];
 
+  const [selected, setSelected] = useState(0);
   const [points, setPoints] = useState(new Array(anecdotes.length).fill(0));
+  const [mostUp, setMostUp] = useState(0);
 
   const generateRandom = (arrayLength) => {
     const random = Math.floor(Math.random() * arrayLength);
@@ -25,19 +25,34 @@ const Anecdotes = () => {
     const newPoints = { ...points };
     newPoints[selected] += 1;
     setPoints(newPoints);
+
+    if (newPoints[mostUp] < newPoints[selected]) {
+      setMostUp(selected);
+    }
   };
 
   return (
     <>
+      <h2>Anecdote of the day</h2>
       <p>{anecdotes[selected]}</p>
       <br />
+
       <p>This anecdote have: {points[selected]} points</p>
       <br />
+
       <button onClick={increasePoints}>Vote for this anecdote</button>
       <br />
+
       <button onClick={() => generateRandom(anecdotes.length)}>
         Next Anecdote
       </button>
+      <br />
+      <br />
+
+      <p>Most upvoted anecdote</p>
+      <p>
+        {anecdotes[mostUp]} <br /> with points {points[mostUp]}
+      </p>
     </>
   );
 };

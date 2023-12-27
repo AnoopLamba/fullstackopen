@@ -23,24 +23,43 @@ const Phonebook = () => {
   // adding new person
   const handleFormSubmit = (e) => {
     e.preventDefault();
-    if (persons.find((person) => person.name === newName)) {
-      window.alert(`"${newName}" is already in the phonebook, choose another!`);
-      return;
+
+    const searchPerson = persons.find((person) => person.name === newName);
+
+    if (searchPerson) {
+      const userResponse = window.confirm(
+        `"${newName}" is already in the phonebook, replace the old number with the new one?`
+      );
+
+      if (userResponse) {
+        const updatedPerson = { ...searchPerson, number: newNumber };
+        phonebookService
+          .editPerson(updatedPerson.id, updatedPerson)
+          .then((data) => {
+            setPersons((prevState) =>
+              prevState.map((person) =>
+                person.id === updatedPerson.id ? data : person
+              )
+            );
+          })
+          .catch((error) => console.log(error.message));
+      }
+    } else {
+      const newPerson = {
+        name: newName,
+        number: newNumber,
+      };
+
+      phonebookService
+        .addPerson(newPerson)
+        .then((data) => {
+          setPersons(persons.concat(data));
+        })
+        .catch((error) => console.log(error.message));
     }
 
-    const newPerson = {
-      name: newName,
-      number: newNumber,
-    };
-
-    phonebookService
-      .addPerson(newPerson)
-      .then((data) => {
-        setPersons(persons.concat(data));
-        setNewName("");
-        setNewNumber("");
-      })
-      .catch((error) => console.log(error.message));
+    setNewName("");
+    setNewNumber("");
   };
 
   // delete person info
@@ -48,7 +67,8 @@ const Phonebook = () => {
     if (window.confirm(`Delete ${name} from contacts?`)) {
       phonebookService
         .deletePerson(id)
-        .then(() => setPersons(persons.filter((person) => person.id !== id)));
+        .then(() => setPersons(persons.filter((person) => person.id !== id)))
+        .catch((error) => console.log(error.message));
     }
   };
 

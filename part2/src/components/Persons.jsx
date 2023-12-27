@@ -4,7 +4,7 @@ const Persons = ({ filteredResults, handleDelete }) => {
   return (
     <>
       {filteredResults.map((person) => (
-        <div key={person.id} style={{ marginBottom: "8px" }}>
+        <li className="person" key={person.id} style={{ marginBottom: "8px" }}>
           <span>
             {person.name} {person.number}
           </span>{" "}
@@ -21,7 +21,7 @@ const Persons = ({ filteredResults, handleDelete }) => {
           >
             Delete
           </button>
-        </div>
+        </li>
       ))}
     </>
   );

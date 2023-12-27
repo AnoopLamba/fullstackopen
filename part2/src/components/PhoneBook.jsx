@@ -2,14 +2,15 @@ import { useEffect, useState } from "react";
 import Filter from "./Filter";
 import PersonForm from "./PersonForm";
 import Persons from "./Persons";
-import axios from "axios";
 import phonebookService from "../services/phonebook";
+import Notification from "./Notification";
 
 const Phonebook = () => {
   const [persons, setPersons] = useState([]);
   const [newName, setNewName] = useState("");
   const [newNumber, setNewNumber] = useState("");
   const [query, setQuery] = useState("");
+  const [errorMessage, setErrorMessage] = useState(null);
 
   // use effect to populate the persons array
   useEffect(() => {
@@ -41,6 +42,10 @@ const Phonebook = () => {
                 person.id === updatedPerson.id ? data : person
               )
             );
+            setErrorMessage("Contact details updated!");
+            setTimeout(() => {
+              setErrorMessage(null);
+            }, 2000);
           })
           .catch((error) => console.log(error.message));
       }
@@ -54,6 +59,10 @@ const Phonebook = () => {
         .addPerson(newPerson)
         .then((data) => {
           setPersons(persons.concat(data));
+          setErrorMessage("New person added!");
+          setTimeout(() => {
+            setErrorMessage(null);
+          }, 2000);
         })
         .catch((error) => console.log(error.message));
     }
@@ -88,14 +97,15 @@ const Phonebook = () => {
 
   return (
     <div>
-      <h2>Phonebook</h2>
+      <h1>Phonebook</h1>
+      <Notification message={errorMessage} />
       <br />
 
       <Filter value={query} onChange={handleQueryChange} />
       <br />
       <br />
 
-      <h2>Add new person</h2>
+      <h1>Add new person</h1>
       <br />
       <PersonForm
         newName={newName}
@@ -106,7 +116,7 @@ const Phonebook = () => {
       />
       <br />
 
-      <h2>Numbers</h2>
+      <h1>Numbers</h1>
       <br />
       <Persons filteredResults={filteredResults} handleDelete={handleDelete} />
     </div>

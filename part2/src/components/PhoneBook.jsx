@@ -47,7 +47,16 @@ const Phonebook = () => {
               setErrorMessage(null);
             }, 2000);
           })
-          .catch((error) => console.log(error.message));
+          .catch((error) => {
+            console.log(error.message);
+            setErrorMessage(`${searchPerson.name} has been already removed!`);
+            setTimeout(() => {
+              setErrorMessage(null);
+            }, 2000);
+            setPersons(
+              persons.filter((person) => person.id !== searchPerson.id)
+            );
+          });
       }
     } else {
       const newPerson = {
@@ -76,8 +85,19 @@ const Phonebook = () => {
     if (window.confirm(`Delete ${name} from contacts?`)) {
       phonebookService
         .deletePerson(id)
-        .then(() => setPersons(persons.filter((person) => person.id !== id)))
-        .catch((error) => console.log(error.message));
+        .then(() => {
+          setPersons(persons.filter((person) => person.id !== id));
+          setErrorMessage(`${name} contact is deleted!`);
+          setTimeout(() => setErrorMessage(null), 2000);
+        })
+        .catch((error) => {
+          console.log(error.message);
+          setErrorMessage(`${name} has already been deleted!`);
+          setTimeout(() => {
+            setErrorMessage(null);
+          }, 2000);
+          setPersons(persons.filter((person) => person.id !== id));
+        });
     }
   };
 

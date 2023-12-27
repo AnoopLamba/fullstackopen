@@ -3,6 +3,7 @@ import Filter from "./Filter";
 import PersonForm from "./PersonForm";
 import Persons from "./Persons";
 import axios from "axios";
+import phonebookService from "../services/phonebook";
 
 const Phonebook = () => {
   const [persons, setPersons] = useState([]);
@@ -13,11 +14,13 @@ const Phonebook = () => {
   // use effect to populate the persons array
   useEffect(() => {
     console.log("useEffect of Phonebook");
-    axios
-      .get("http://localhost:3001/persons")
-      .then((response) => setPersons(response.data));
+    phonebookService
+      .getAllPersons()
+      .then((data) => setPersons(data))
+      .catch((error) => console.log(error.message));
   }, []);
 
+  // adding new person
   const handleFormSubmit = (e) => {
     e.preventDefault();
     if (persons.find((person) => person.name === newName)) {
@@ -26,13 +29,18 @@ const Phonebook = () => {
     }
 
     const newPerson = {
-      id: persons.length + 1,
       name: newName,
-      phone: newNumber,
+      number: newNumber,
     };
-    setPersons(persons.concat(newPerson));
-    setNewName("");
-    setNewNumber("");
+
+    phonebookService
+      .addPerson(newPerson)
+      .then((data) => {
+        setPersons(persons.concat(data));
+        setNewName("");
+        setNewNumber("");
+      })
+      .catch((error) => console.log(error.message));
   };
 
   const filteredResults = persons.filter((person) =>

@@ -43,6 +43,15 @@ const Phonebook = () => {
       .catch((error) => console.log(error.message));
   };
 
+  // delete person info
+  const handleDelete = (id, name) => {
+    if (window.confirm(`Delete ${name} from contacts?`)) {
+      phonebookService
+        .deletePerson(id)
+        .then(() => setPersons(persons.filter((person) => person.id !== id)));
+    }
+  };
+
   const filteredResults = persons.filter((person) =>
     person.name.toLowerCase().includes(query.toLowerCase())
   );
@@ -79,7 +88,7 @@ const Phonebook = () => {
 
       <h2>Numbers</h2>
       <br />
-      <Persons filteredResults={filteredResults} />
+      <Persons filteredResults={filteredResults} handleDelete={handleDelete} />
     </div>
   );
 };

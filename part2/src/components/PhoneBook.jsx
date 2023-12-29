@@ -5,8 +5,22 @@ import Persons from "./Persons";
 import phonebookService from "../services/phonebook";
 import Notification from "./Notification";
 
+const Footer = () => {
+  const footerStyle = { color: "green", fontStyle: "italic", fontSize: 16 };
+
+  return (
+    <div style={footerStyle}>
+      {" "}
+      <br />{" "}
+      <em>
+        Note app, Department of Computer Science, University of Helsinki 2023
+      </em>{" "}
+    </div>
+  );
+};
+
 const Phonebook = () => {
-  const [persons, setPersons] = useState([]);
+  const [persons, setPersons] = useState(null);
   const [newName, setNewName] = useState("");
   const [newNumber, setNewNumber] = useState("");
   const [query, setQuery] = useState("");
@@ -101,9 +115,11 @@ const Phonebook = () => {
     }
   };
 
-  const filteredResults = persons.filter((person) =>
-    person.name.toLowerCase().includes(query.toLowerCase())
-  );
+  const filteredResults =
+    persons &&
+    persons.filter((person) =>
+      person.name.toLowerCase().includes(query.toLowerCase())
+    );
 
   const handleQueryChange = (e) => {
     setQuery(e.target.value);
@@ -116,30 +132,38 @@ const Phonebook = () => {
   };
 
   return (
-    <div>
-      <h1>Phonebook</h1>
-      <Notification message={errorMessage} />
-      <br />
+    <>
+      <div>
+        <h1>Phonebook</h1>
+        <Notification message={errorMessage} />
+        <br />
 
-      <Filter value={query} onChange={handleQueryChange} />
-      <br />
-      <br />
+        <Filter value={query} onChange={handleQueryChange} />
+        <br />
+        <br />
 
-      <h1>Add new person</h1>
-      <br />
-      <PersonForm
-        newName={newName}
-        handleNameChange={handleNameChange}
-        newNumber={newNumber}
-        handleNumberChange={handleNumberChange}
-        handleFormSubmit={handleFormSubmit}
-      />
-      <br />
+        <h1>Add new person</h1>
+        <br />
+        <PersonForm
+          newName={newName}
+          handleNameChange={handleNameChange}
+          newNumber={newNumber}
+          handleNumberChange={handleNumberChange}
+          handleFormSubmit={handleFormSubmit}
+        />
+        <br />
 
-      <h1>Numbers</h1>
-      <br />
-      <Persons filteredResults={filteredResults} handleDelete={handleDelete} />
-    </div>
+        <h1>Numbers</h1>
+        <br />
+        {persons && (
+          <Persons
+            filteredResults={filteredResults}
+            handleDelete={handleDelete}
+          />
+        )}
+      </div>
+      <Footer />
+    </>
   );
 };
 

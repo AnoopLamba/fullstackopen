@@ -1,3 +1,5 @@
+import CountryWeather from "./CountryWeather";
+
 const CountryView = ({ viewCountry, setViewCountry }) => {
   return (
     <div>
@@ -15,8 +17,11 @@ const CountryView = ({ viewCountry, setViewCountry }) => {
         ))}
       </ul>
       <br />
-      <p>Flag {console.log(viewCountry.flags.alt)}</p>
+      <p>Flag</p>
       <img src={viewCountry.flags.png} alt={viewCountry.flags.alt} />
+      <br />
+      <br />
+      <CountryWeather country={viewCountry.name.common} />
     </div>
   );
 };

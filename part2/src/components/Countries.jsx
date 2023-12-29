@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import countriesService from "../services/countries";
 import CountryView from "./CountryView";
+import CountryWeather from "./CountryWeather";
 
 const Countries = () => {
   const [countries, setCountries] = useState([]);
@@ -12,10 +13,13 @@ const Countries = () => {
     if (localData) {
       setCountries(localData);
     } else {
-      countriesService.getAll().then((data) => {
-        setCountries(data);
-        localStorage.setItem("countries", JSON.stringify(data));
-      });
+      countriesService
+        .getAll()
+        .then((data) => {
+          setCountries(data);
+          localStorage.setItem("countries", JSON.stringify(data));
+        })
+        .catch((error) => console.log(error.message));
     }
   }, []);
 
@@ -61,11 +65,14 @@ const Countries = () => {
                   ))}
                 </ul>
                 <br />
-                <p>Flag {console.log(filteredResults[0].flags.alt)}</p>
+                <p>Flag</p>
                 <img
                   src={filteredResults[0].flags.png}
                   alt={filteredResults[0].flags.alt}
                 />
+                <br />
+                <br />
+                <CountryWeather country={filteredResults[0].name.common} />
               </div>
             ) : (
               filteredResults.map((country) => (
